@@ -1,7 +1,6 @@
 package golvm2
 
 // #cgo LDFLAGS: -llvm2app -L /usr/lib/
-// #include <stdio.h>
 // #include <lvm2app.h>
 // #include "lvm_property_extension.h"
 import "C"
@@ -401,7 +400,7 @@ func (vg *VolumeGroup) LvFromName(lvname string) (*LogicalVolume, error) {
 
 	c_lv := C.lvm_lv_from_name(vg.c_vgh, c_lvname)
 	if c_lv == nil {
-		return nil, Lvm2Error{-1, "Not Found error!"}
+		return nil, Lvm2Error{-1, "C function lvm_lv_from_name failed!"}
 	}
 
 	lv := new(LogicalVolume)
@@ -416,11 +415,41 @@ func (vg *VolumeGroup) LvFromUUID(uuid string) (*LogicalVolume, error) {
 
 	c_lv := C.lvm_lv_from_uuid(vg.c_vgh, c_uuid)
 	if c_lv == nil {
-		return nil, Lvm2Error{-1, "Not Found error!"}
+		return nil, Lvm2Error{-1, "C function lvm_lv_from_uuid failed!"}
 	}
 
 	lv := new(LogicalVolume)
 	lv.c_lvh = c_lv
 	lv.c_lvm2h = vg.c_lvm2h
 	return lv, nil
+}
+
+func (vg *VolumeGroup) PvFromName(pvname string) (*PhysicalVolume, error) {
+	c_pvname := C.CString(pvname)
+	defer C.free(unsafe.Pointer(c_pvname))
+
+	c_pv := C.lvm_pv_from_name(vg.c_vgh, c_pvname)
+	if c_pv == nil {
+		return nil, Lvm2Error{-1, "C function lvm_pv_from_name failed!"}
+	}
+
+	pv := new(PhysicalVolume)
+	pv.c_pvh = c_pv
+	pv.c_lvm2h = vg.c_lvm2h
+	return pv, nil
+}
+
+func (vg *VolumeGroup) PvFromUUID(uuid string) (*PhysicalVolume, error) {
+	c_uuid := C.CString(uuid)
+	defer C.free(unsafe.Pointer(c_uuid))
+
+	c_pv := C.lvm_pv_from_uuid(vg.c_vgh, c_uuid)
+	if c_pv == nil {
+		return nil, Lvm2Error{-1, "Not Found error!"}
+	}
+
+	pv := new(PhysicalVolume)
+	pv.c_pvh = c_pv
+	pv.c_lvm2h = vg.c_lvm2h
+	return pv, nil
 }

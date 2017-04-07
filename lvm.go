@@ -1,20 +1,14 @@
 package golvm2
 
-import (
-	"fmt"
-	"unsafe"
-)
-
 // #cgo LDFLAGS: -llvm2app -L /usr/lib/
 // #include <stdio.h>
 // #include <lvm2app.h>
 import "C"
 
-//import (
-//	"fmt"
-//	"reflect"
-//	"unsafe"
-//)
+import (
+	"fmt"
+	"unsafe"
+)
 
 type Lvm2Error struct {
 	errCode int
@@ -155,12 +149,4 @@ func (lvmh *Lvm2Handler) VgCreate(vgname string) (*VolumeGroup, error) {
 	vg.c_vgh = c_vg
 	vg.c_lvm2h = lvmh.c_lvm2h
 	return vg, nil
-}
-
-func main() {
-	lvmh, err := NewLvm2Handler()
-	if err != nil {
-		fmt.Println(err)
-	}
-	lvmh.Quit()
 }

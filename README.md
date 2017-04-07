@@ -1,6 +1,7 @@
 # golvm2 - An lvm2 Library for Go 
 
-This library is only tested in Linux, such as(ubuntu14.04, centos7)
+This library is only tested in Linux, such as(ubuntu14.04, centos7). Golvm2 depends liblvm api which is written by C.
+You must install lvm2-devel(Centos) or liblvm2-dev(Ubuntu) before use this library which use cgo.
 
 ## Example Usage
 

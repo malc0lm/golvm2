@@ -15,3 +15,5 @@ typedef struct lvm_property_value_c {
 lvm_property_value_c *lvm_vg_get_property_c(const vg_t vg, const char *name);
 lvm_property_value_c *lvm_lvseg_get_property_c(const lvseg_t lvseg, const char *name);
 lvm_property_value_c *lvm_lv_get_property_c(const lv_t lv, const char *name);
+lvm_property_value_c *lvm_pv_get_property_c(const pv_t pv, const char *name);
+lvm_property_value_c *lvm_pvseg_get_property_c(const pvseg_t pvseg, const char *name);

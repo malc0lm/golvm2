@@ -29,7 +29,6 @@ type LvDetail struct {
 	isSuspended bool
 }
 
-//TODO implement
 func (lv *LogicalVolume) LvListLvsegHandler() ([]*LogicalVolumeSegment, error) {
 	lvsegList := make([]*LogicalVolumeSegment, 0, 10)
 	var lvsegl *C.lvseg_list_t
@@ -119,7 +118,6 @@ func (lv *LogicalVolume) LvGetProperty(prop string) (*LvmPropertyValue, error) {
 		propValue.value = unionToUint64(c_prop.value)
 	}
 	return propValue, nil
-
 }
 
 func (lv *LogicalVolume) LvIsActive() bool {

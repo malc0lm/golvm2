@@ -6,14 +6,16 @@ import (
 )
 
 func Test_LvListLvsegHandler(t *testing.T) {
-	lvmh, _ := NewLvm2Handler()
-	vgh, _ := lvmh.VgOpen("vgtest", "w", 0)
-	lvh, _ := vgh.LvFromName("lv1")
+	lvmh, err := NewLvm2Handler()
+	defer lvmh.Quit()
+	checkError(err)
+	vgh, err := lvmh.VgOpen("vgtest", "w", 0)
+	defer vgh.VgClose()
+	checkError(err)
+	lvh, err := vgh.LvFromName("lv1")
+	checkError(err)
 	l, err := lvh.LvListLvsegHandler()
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-	}
+	checkError(err)
 	if len(l) == 0 {
 		fmt.Println("0 lvseg")
 		return
@@ -27,19 +29,19 @@ func Test_LvListLvsegHandler(t *testing.T) {
 			fmt.Println(prop.value.(string))
 		}
 	}
-	vgh.VgClose()
-	lvmh.Quit()
 }
 
 func Test_LvGetProperty(t *testing.T) {
-	lvmh, _ := NewLvm2Handler()
-	vgh, _ := lvmh.VgOpen("vgtest", "w", 0)
-	lvh, _ := vgh.LvFromName("lv1")
+	lvmh, err := NewLvm2Handler()
+	defer lvmh.Quit()
+	checkError(err)
+	vgh, err := lvmh.VgOpen("vgtest", "w", 0)
+	defer vgh.VgClose()
+	checkError(err)
+	lvh, err := vgh.LvFromName("lv1")
+	checkError(err)
 	prop, err := lvh.LvGetProperty("lv_size")
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-	}
+	checkError(err)
 	if prop.isInteger {
 		fmt.Println(prop.value.(uint64))
 	}
@@ -47,13 +49,16 @@ func Test_LvGetProperty(t *testing.T) {
 		fmt.Println(prop.value.(string))
 	}
 
-	vgh.VgClose()
-	lvmh.Quit()
 }
 func Test_LvGetTags(t *testing.T) {
-	lvmh, _ := NewLvm2Handler()
-	vgh, _ := lvmh.VgOpen("vgtest", "w", 0)
-	lvh, _ := vgh.LvFromName("lv1")
+	lvmh, err := NewLvm2Handler()
+	defer lvmh.Quit()
+	checkError(err)
+	vgh, err := lvmh.VgOpen("vgtest", "w", 0)
+	defer vgh.VgClose()
+	checkError(err)
+	lvh, err := vgh.LvFromName("lv1")
+	checkError(err)
 
 	lvh.LvAddTag("tag1")
 	lvh.LvAddTag("tag2")
@@ -66,6 +71,4 @@ func Test_LvGetTags(t *testing.T) {
 	for i := 0; i < len(vTagList); i++ {
 		fmt.Println(vTagList[i])
 	}
-	vgh.VgClose()
-	lvmh.Quit()
 }

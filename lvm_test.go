@@ -6,26 +6,18 @@ import (
 )
 
 func Test_ListVgNames(t *testing.T) {
-	lvmh, _ := NewLvm2Handler()
-
+	lvmh, err := NewLvm2Handler()
+	defer lvmh.Quit()
+	checkError(err)
 	nameList, err := lvmh.ListVgNames()
-
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-	}
+	checkError(err)
 	fmt.Println(nameList)
-	lvmh.Quit()
 }
 func Test_ListVgUUIDs(t *testing.T) {
-	lvmh, _ := NewLvm2Handler()
-
+	lvmh, err := NewLvm2Handler()
+	defer lvmh.Quit()
+	checkError(err)
 	nameList, err := lvmh.ListVgUUIDs()
-
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-	}
+	checkError(err)
 	fmt.Println(nameList)
-	lvmh.Quit()
 }
